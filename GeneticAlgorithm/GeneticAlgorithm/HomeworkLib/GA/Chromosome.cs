@@ -112,17 +112,7 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// <returns></returns>
         public static double MaxFitness(List<Chromosome> chromosomes)
         {
-            double maxFitness = 0;
-
-            foreach (var c in chromosomes)
-            {
-                if (c.Fitness > maxFitness)
-                {
-                    maxFitness = c.Fitness;
-                }
-            }
-
-            return maxFitness;
+            return chromosomes.Max(p => p.Fitness);
         }
 
         /// <summary>

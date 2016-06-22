@@ -31,7 +31,6 @@ public class Link {
     /// <returns></returns>
     public Link GenerateNewRandomLink(Random r)
     {
-      
         double isActive = r.NextDouble();
 
         return new Link()

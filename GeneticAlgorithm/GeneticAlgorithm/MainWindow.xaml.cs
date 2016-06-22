@@ -32,7 +32,7 @@ namespace GeneticAlgorithm
 
             // load file.
             links = FileHelper.ReadFile("Data\\network.txt");
-
+           // ConfigurePlot();
         }
 
         private void buttonRun_Click(object sender, RoutedEventArgs e)
@@ -48,39 +48,63 @@ namespace GeneticAlgorithm
 
             List<AlgorithmResult> ar = a.Run().ToList();
             int x = 0;
-            points.Clear();
+            maxPoints.Clear();
+            avgPoints.Clear();
             foreach (var item in ar)
             {
-                points.Add(new DataPoint(x, item.AverageFitness));
+                maxPoints.Add(new DataPoint(x, item.MaxFitness));
+                avgPoints.Add(new DataPoint(x, item.AverageFitness));
                 x++;
             }
 
-            plotter.InvalidatePlot(true);
+            plotter.InvalidatePlot(true); 
         }
 
-        public static List<DataPoint> points = new List<DataPoint>();
+
+        /// <summary>
+        /// Do we need this?
+        /// </summary>
+        void ConfigurePlot()
+        {
+            plotter.LegendTitle = "Legend";
+            plotter.LegendOrientation = LegendOrientation.Horizontal;
+            plotter.LegendPlacement = LegendPlacement.Outside;
+            plotter.LegendPosition = LegendPosition.TopRight;
+            plotter.LegendBackground = Colors.LimeGreen;
+            plotter.LegendBorder = Colors.Black;
+
+        }
+
+        public static List<DataPoint> maxPoints = new List<DataPoint>();
+        public static List<DataPoint> avgPoints = new List<DataPoint>();
     }
 
     public class MainViewModel
     {
         public MainViewModel()
         {
-            this.Title = "Example 2";
-            MainWindow.points = new List<DataPoint>
+            this.Title = "Overlay Networks using a Genetic Algorithm";
+
+
+            MainWindow.maxPoints = new List<DataPoint>
             {
-                new DataPoint(0, 4),
-                new DataPoint(10, 13),
-                new DataPoint(20, 15),
-                new DataPoint(30, 16),
-                new DataPoint(40, 12),
-                new DataPoint(50, 12)
+                //new DataPoint(0, 4),
+                //new DataPoint(10, 13),
+                //new DataPoint(20, 15),
+                //new DataPoint(30, 16),
+                //new DataPoint(40, 12),
+                //new DataPoint(50, 12)
             };
 
-            this.Points = MainWindow.points;
+            MainWindow.avgPoints = new List<DataPoint>();
+
+            this.MaxPoints = MainWindow.maxPoints;
+            this.AvgPoints = MainWindow.avgPoints;
         }
 
         public string Title { get; private set; }
 
-        public IList<DataPoint> Points { get; private set; }
+        public IList<DataPoint> MaxPoints { get; private set; }
+        public IList<DataPoint> AvgPoints { get; private set; }
     }
 }

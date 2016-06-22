@@ -56,8 +56,10 @@
         <Border BorderBrush="Black" BorderThickness="1" Margin="125,43,10,109">
             <oxy:Plot Title="{Binding Title}" Name="plotter">
                 <oxy:Plot.Series>
-                    <oxy:LineSeries ItemsSource="{Binding Points}" />
+                    <oxy:LineSeries ItemsSource="{Binding MaxPoints}" Name="Max" Title="Max"/>
+                    <oxy:LineSeries ItemsSource="{Binding AvgPoints}" LineStyle="Dot" Name="Average" Title="Average"/>
                 </oxy:Plot.Series>
+                
             </oxy:Plot>
             <!--ListBox x:Name="resultBox" Margin="0,231,0,0"/>-->
         </Border>

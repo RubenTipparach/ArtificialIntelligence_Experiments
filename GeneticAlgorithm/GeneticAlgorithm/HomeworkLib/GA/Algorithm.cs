@@ -140,12 +140,13 @@ namespace GeneticAlgorithm.HomeworkLib.GA
                 // randomly perform crossovers. Roll a dice or something.
                 if (random.NextDouble() < _crossoverProbability)
                 {
+                    // random pair from population.
                     Chromosome aCrosser = _population[random.Next(_population.Count)];
                     Chromosome bCrosser = _population[random.Next(_population.Count)];
 
-                    // Generate a random range.
-                    int startRange = random.Next(_population.Count);
-                    int endRange = random.Next(startRange, _population.Count);
+                    // Generate a random range from the number of genes.
+                    int startRange = random.Next(_initialLinks.Count);
+                    int endRange = random.Next(startRange, _initialLinks.Count);
 
                     // Hopefully my trust in references is honored.
                     Chromosome.Crossover(aCrosser, bCrosser, startRange, endRange);
