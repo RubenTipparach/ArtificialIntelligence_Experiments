@@ -40,7 +40,7 @@ namespace HomeworkLib.Util
                 }
             }
 
-            _fitness = 1 - (_cost / _costCompleteNetwork);
+            _fitness = 1.0 - (_cost / _costCompleteNetwork);
             return _fitness;
         }
     }

@@ -25,6 +25,7 @@ namespace GeneticAlgorithm
     public partial class MainWindow : Window
     {
         List<Link> links;
+		List<AlgorithmResult> ar;
 
         public MainWindow()
         {
@@ -37,7 +38,7 @@ namespace GeneticAlgorithm
 
         private void buttonRun_Click(object sender, RoutedEventArgs e)
         {
-            //resultBox.Items.Clear();
+            resultBox.Items.Clear();
             //points.Clear();
             
             Algorithm a = new Algorithm(links,
@@ -46,14 +47,18 @@ namespace GeneticAlgorithm
                 Convert.ToDouble(inputCrossover.Text),
                 Convert.ToDouble(inputMutation.Text));
 
-            List<AlgorithmResult> ar = a.Run().ToList();
+			ar = a.Run().ToList();
+
             int x = 0;
+
             maxPoints.Clear();
             avgPoints.Clear();
+
             foreach (var item in ar)
             {
                 maxPoints.Add(new DataPoint(x, item.MaxFitness));
                 avgPoints.Add(new DataPoint(x, item.AverageFitness));
+				resultBox.Items.Add(item.ToString());
                 x++;
             }
 
@@ -76,10 +81,23 @@ namespace GeneticAlgorithm
         }
 
         public static List<DataPoint> maxPoints = new List<DataPoint>();
-        public static List<DataPoint> avgPoints = new List<DataPoint>();
-    }
 
-    public class MainViewModel
+        public static List<DataPoint> avgPoints = new List<DataPoint>();
+
+		/// <summary>
+		/// Handles the Click event of the btnSaveData control.
+		/// This method was created to diagnose a bug found when running the algorithm.
+		/// Perhaps there's a bug in the code causing the population to die out, or a bad random number generator?
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+		private void btnSaveData_Click(object sender, RoutedEventArgs e)
+		{
+			FileHelper.WriteFile("Chromosomes.txt", ar);
+		}
+	}
+
+	public class MainViewModel
     {
         public MainViewModel()
         {

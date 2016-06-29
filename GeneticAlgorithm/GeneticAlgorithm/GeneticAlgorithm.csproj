@@ -83,10 +83,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Example\Window1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -95,33 +91,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Example\Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
     <Compile Include="HomeworkLib\GA\Algorithm.cs" />
     <Compile Include="HomeworkLib\GA\AlgorithmResult.cs" />
     <Compile Include="HomeworkLib\GA\Chromosome.cs" />
     <Compile Include="HomeworkLib\Util\FileHelper.cs" />
     <Compile Include="HomeworkLib\Util\Fitness.cs" />
     <Compile Include="HomeworkLib\Util\Link.cs" />
-    <Compile Include="WPFChart3D\Bar3D.cs" />
-    <Compile Include="WPFChart3D\Chart3D.cs" />
-    <Compile Include="WPFChart3D\ColorMesh3D.cs" />
-    <Compile Include="WPFChart3D\Cone3D.cs" />
-    <Compile Include="WPFChart3D\Cylinder3D.cs" />
-    <Compile Include="WPFChart3D\Ellipse3D.cs" />
-    <Compile Include="WPFChart3D\Mesh3D.cs" />
-    <Compile Include="WPFChart3D\Model3D.cs" />
-    <Compile Include="WPFChart3D\Pyramid3D.cs" />
-    <Compile Include="WPFChart3D\ScatterChart3D.cs" />
-    <Compile Include="WPFChart3D\ScatterPlotItem.cs" />
-    <Compile Include="WPFChart3D\SurfaceChart3D.cs" />
-    <Compile Include="WPFChart3D\TextureMapping.cs" />
-    <Compile Include="WPFChart3D\TransformMatrix.cs" />
-    <Compile Include="WPFChart3D\Triangle3D.cs" />
-    <Compile Include="WPFChart3D\UniformSurfaceChart3D.cs" />
-    <Compile Include="WPFChart3D\Vertex3D.cs" />
-    <Compile Include="WPFChart3D\ViewportRect.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

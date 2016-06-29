@@ -2,7 +2,7 @@ using System;
 /// <summary>
 /// This class defines the structure of a link.
 /// </summary>
-public class Link {
+public struct Link {
 
     /// <summary>
     /// node 1
@@ -24,6 +24,7 @@ public class Link {
     /// </summary>
     public bool Active;
 
+	
     /// <summary>
     /// Returns a link copy that is randomly activated.
     /// Useful for initializing a population.

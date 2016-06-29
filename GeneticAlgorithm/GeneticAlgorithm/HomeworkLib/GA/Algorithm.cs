@@ -20,7 +20,9 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// <summary>
         /// 
         /// </summary>
-        private int _initialPopulation;
+        private int _populationSize;
+
+		private int _geneSize;
 
         /// <summary>
         /// 
@@ -47,7 +49,9 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// </summary>
         private List<AlgorithmResult> _resultData;
 
-        private Random random = new Random();
+		private Random _random;
+
+		private double _globalMax = 0;
 
         /// <summary>
         /// Initialize an instance of the algorithm.
@@ -59,12 +63,14 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         public Algorithm(List<Link> links, int generations, int initialPopulation, double crossoverProbability, double mutationProbability)
         {
             _initialLinks = links;
-            _generations = generations;
-            _initialPopulation = initialPopulation;
+			_geneSize = links.Count;
+			_generations = generations;
+            _populationSize = initialPopulation;
             _crossoverProbability = crossoverProbability;
             _mutationProbability = mutationProbability;
 
-            _population = new List<Chromosome>(_initialPopulation);
+			_random = new Random();
+			_population = new List<Chromosome>(_populationSize);
         }
 
         /// <summary>
@@ -72,8 +78,10 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// </summary>
         public IEnumerable<AlgorithmResult> Run()
         {
-            // Step 1.
-            GenerateChromosomes();
+			//_random = new Random();
+
+			// Step 1.
+			GenerateChromosomes();
 
             // What happens during each gneration.
             for (int i = 0; i < _generations; i++)
@@ -96,35 +104,59 @@ namespace GeneticAlgorithm.HomeworkLib.GA
             // Step 4.
             PerformSelection();
 
-            return new AlgorithmResult()
-            {
-                MaxFitness = Chromosome.MaxFitness(_population),
-                AverageFitness = Chromosome.AverageFitness(_population),
+			if(Chromosome.AverageFitness(_population) < 0.1)
+			{
+				Console.WriteLine("sup");
+			}
 
-                // assign these as we go.
-                NumberOfCrossOversOccured = crossoversOccured,
-                NumberOfMutationsOccured = mutationsOccured
+			// dump the data!
+			return new AlgorithmResult()
+			{
+				MaxFitness = MaxFitness(_population),
+				AverageFitness = Chromosome.AverageFitness(_population),
+
+				// assign these as we go.
+				NumberOfCrossOversOccured = crossoversOccured,
+				NumberOfMutationsOccured = mutationsOccured//,
+				//GetChromosomeString = Chromosome.PopulationString(_population) // <-- use for debug.
             };
         }
 
-        /// <summary>
-        /// Step 1. Randomly generate the genetics <see cref="_initialPopulation"/> tiems.
-        /// </summary>
-        protected void GenerateChromosomes()
-        {
-            // randomly generate chromosomes for our population.
-            Loop((int i) =>
-            {
-                List<Link> newLinks = new List<Link>(_initialLinks.Count);
+		/// <summary>
+		/// Calculate what the maximum fit ness is of a given set of chromosomes.
+		/// </summary>
+		/// <param name="chromosomes"></param>
+		/// <returns></returns>
+		public double MaxFitness(List<Chromosome> chromosomes)
+		{
+			double max = chromosomes.Max(p => p.Fitness);
 
-                for (int j = 0; j < _initialLinks.Count; j++)
+			if (_globalMax < max)
+			{
+				_globalMax = max;
+			}
+
+			return _globalMax;
+		}
+
+		/// <summary>
+		/// Step 1. Randomly generate the genetics <see cref="_populationSize"/> tiems.
+		/// </summary>
+		protected void GenerateChromosomes()
+        {
+			// randomly generate chromosomes for our population.
+			for (int i = 0; i < _populationSize; i++)
+			{
+				List<Link> newLinks = new List<Link>(_geneSize);
+
+                for (int j = 0; j < _geneSize; j++)
                 {
-                    newLinks.Add(_initialLinks[j].GenerateNewRandomLink(random));
+                    newLinks.Add(_initialLinks[j].GenerateNewRandomLink(_random));
                 }
 
                 // finished!
                 _population.Add( new Chromosome(newLinks));
-            });
+            }
         }
 
         /// <summary>
@@ -135,25 +167,27 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         {
             int crossoverCounter = 0;
 
-            Loop((int i) =>
-            {
-                // randomly perform crossovers. Roll a dice or something.
-                if (random.NextDouble() < _crossoverProbability)
+			for (int i = 0; i < _populationSize; i++)
+			{
+				double selection = _random.NextDouble();
+
+				// randomly perform crossovers. Roll a dice or something.
+				if (selection < _crossoverProbability)
                 {
                     // random pair from population.
-                    Chromosome aCrosser = _population[random.Next(_population.Count)];
-                    Chromosome bCrosser = _population[random.Next(_population.Count)];
+                    Chromosome aCrosser = _population[_random.Next(_populationSize)];
+                    Chromosome bCrosser = _population[_random.Next(_populationSize)];
 
                     // Generate a random range from the number of genes.
-                    int startRange = random.Next(_initialLinks.Count);
-                    int endRange = random.Next(startRange, _initialLinks.Count);
+                    int startRange = _random.Next(_geneSize);
+                    int endRange = _random.Next(startRange, _geneSize);
 
                     // Hopefully my trust in references is honored.
                     Chromosome.Crossover(aCrosser, bCrosser, startRange, endRange);
 
                     crossoverCounter++;
                 }
-            });
+            }
 
             return crossoverCounter;
         }
@@ -164,41 +198,51 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         protected int PerformMutation()
         {
             int mutationCounter = 0;
-            Random r = new Random();
 
-            // randomly mutate.
-            Loop((int i) =>
-            {
-                // randomly perform crossovers. Roll a dice or something.
-                if (r.NextDouble() < _mutationProbability)
+			//Random r = new Random(); Local random causing trouble!!!!!!!
+
+			// randomly mutate.
+			for (int i = 0; i < _populationSize; i++)
+			{
+				// randomly perform crossovers. Roll a dice or something.
+				double mutate = _random.NextDouble();
+                if (mutate < _mutationProbability)
                 {
-                    int flipBit = r.Next(_initialLinks.Count);
-                    
-                    //flip this.
-                    _population[i].Links[flipBit].Active = !_population[i].Links[flipBit].Active;
+                    int flipBit = _random.Next(_geneSize);
+
+					//flip this.
+					Link copy = _population[i].Links[flipBit];
+					copy.Active = !copy.Active;
+
+					//copy over new link.
+                    _population[i].Links[flipBit] = copy;
 
                     mutationCounter++;
                 }
-            });
+            }
 
             return mutationCounter;
         }
 
         /// <summary>
         /// Step 4. Perform the 'Tournament' selection. Randomly select two, which ever wins
-        /// get's selected. Do this <see cref="_initialPopulation"/> times.
+        /// get's selected. Do this <see cref="_populationSize"/> times.
         /// </summary>
         protected void PerformSelection()
         {
             // take the current list, and copy it into a new one using the tournament rules.
 
-            List<Chromosome> nextGeneration = new List<Chromosome>(_initialPopulation);
-            Random r = new Random();
+            List<Chromosome> nextGeneration = new List<Chromosome>(_populationSize);
 
-            Loop((int i) =>
-            {
-                Chromosome aContester = _population[r.Next(_population.Count)];
-                Chromosome bContester = _population[r.Next(_population.Count)];
+			for (int i = 0; i < _populationSize; i++)
+			{
+				int a = _random.Next(_populationSize);
+				int b = _random.Next(_populationSize);
+				
+			
+				// Warning! Copy this, ;ooks like lots of side effects if I dont!
+                Chromosome aContester = _population[a].Copy();
+                Chromosome bContester = _population[b].Copy();
 
                 // the winner of the tournament goes to the next round!
                 if (aContester.Fitness > bContester.Fitness)
@@ -209,22 +253,11 @@ namespace GeneticAlgorithm.HomeworkLib.GA
                 {
                     nextGeneration.Add(bContester);
                 }
-            });
+            }
 
             //replace with new crossoverPopulation
             _population = nextGeneration;
 
-        }
-
-        /// <summary>
-        /// I just hate typing for loops.
-        /// </summary>
-        private void Loop(Action<int> iterate)
-        {
-            for (int i = 0; i < _initialPopulation; i++)
-            {
-                iterate(i);
-            }
         }
 
         /// <summary>

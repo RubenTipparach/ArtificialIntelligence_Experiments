@@ -16,6 +16,22 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// </summary>
         private List<Link> _encodedString;
 
+		/// <summary>
+		/// Copies this instance.
+		/// </summary>
+		/// <returns></returns>
+		public Chromosome Copy()
+		{
+			// perform deep copy.
+			List<Link> newLinks = new List<Link>();
+			foreach(var l in _encodedString)
+			{
+				newLinks.Add(l);
+			}
+
+			return new Chromosome(newLinks);
+		}
+
         /// <summary>
         /// IDK why, I guess I like this class better than the links one.
         /// </summary>
@@ -60,7 +76,11 @@ namespace GeneticAlgorithm.HomeworkLib.GA
 
             for (int i = startIndex; i < endindex; i++)
             {
-                _encodedString[i].Active = rangeString[y];
+				//copy link over.
+				Link newLink = _encodedString[i];
+				newLink.Active = rangeString[y];
+
+                _encodedString[i] = newLink;
                 y++;
             }
 
@@ -92,7 +112,8 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         {
             get
             {
-                return (new Fitness()).CalculateFitnessOfOverlayNetwork(_encodedString);
+				var f = new Fitness();
+				return f.CalculateFitnessOfOverlayNetwork(_encodedString);
             }
         }
 
@@ -104,16 +125,21 @@ namespace GeneticAlgorithm.HomeworkLib.GA
             }
         }
 
+		/// <summary>
+		/// Populations the string.
+		/// </summary>
+		/// <param name="chromosomes">The chromosomes.</param>
+		/// <returns></returns>
+		public static string PopulationString(List<Chromosome> chromosomes)
+		{
+			string s = "";
+			foreach (var link in chromosomes)
+			{
+				s += link.ToString() + Environment.NewLine;
+			}
 
-        /// <summary>
-        /// Calculate what the maximum fit ness is of a given set of chromosomes.
-        /// </summary>
-        /// <param name="chromosomes"></param>
-        /// <returns></returns>
-        public static double MaxFitness(List<Chromosome> chromosomes)
-        {
-            return chromosomes.Max(p => p.Fitness);
-        }
+			return s;
+		}
 
         /// <summary>
         /// Gets the fitness average of all chromosomes in this list.
@@ -122,7 +148,31 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// <returns>Yay Linq!</returns>
         public static double AverageFitness(List<Chromosome> chromosomes)
         {
-            return chromosomes.Average(p => p.Fitness);
+			double totalScore = 0;
+			foreach (var c in chromosomes)
+			{
+				totalScore += c.Fitness;
+			}
+
+            return totalScore/(double)chromosomes.Count;
         }
-    }
+
+		/// <summary>
+		/// This concats all the genes together.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String" /> that represents this instance.
+		/// </returns>
+		public override string ToString()
+		{
+			string s = "";
+
+			foreach(var link in _encodedString)
+			{
+				s += link.Active ? "1" : "0";
+			}
+
+			return s;
+		}
+	}
 }

@@ -36,9 +36,15 @@ namespace GeneticAlgorithm.HomeworkLib.GA
             set;
         }
 
+		public string GetChromosomeString
+		{
+			get;
+			set;
+		}
+
         public override string ToString()
         {
-            return string.Format("max ftn: {0},  avg ftnL{1}, mutations {2}, crossovers {3}", 
+            return string.Format("max ftn: {0},  avg ftn: {1}, mutations: {2}, crossovers: {3}", 
                 MaxFitness, AverageFitness, NumberOfMutationsOccured, NumberOfCrossOversOccured);
         }
     }

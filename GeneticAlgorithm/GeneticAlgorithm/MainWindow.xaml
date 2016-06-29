@@ -6,64 +6,63 @@
         xmlns:local="clr-namespace:GeneticAlgorithm"
         xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="556.424" Width="831.091">
-    <Window.DataContext>
-        <local:MainViewModel/>
-    </Window.DataContext>
-    <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="28" Margin="10,10,0,0" VerticalAlignment="Top" Width="110">
-            <Label x:Name="lblParameters" Content="Parameters"/>
-        </Border>
+        Title="MainWindow" Height="556.424" Width="994.091">
+	<Window.DataContext>
+		<local:MainViewModel/>
+	</Window.DataContext>
+	<Grid Margin="0,0,2,0">
+		<Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="28" Margin="10,10,0,0" VerticalAlignment="Top" Width="110">
+			<Label x:Name="lblParameters" Content="Parameters"/>
+		</Border>
 
-        <!-- The Inputs. -->
-        <Border BorderBrush="Black" BorderThickness="1" Margin="10,43,0,37" HorizontalAlignment="Left" Width="110">
-            <ListBox x:Name="listBoxParams" Margin="-1">
+		<!-- The Inputs. -->
+		<Border BorderBrush="Black" BorderThickness="1" Margin="10,43,0,37" HorizontalAlignment="Left" Width="110">
+			<ListBox x:Name="listBoxParams" Margin="-1">
 
-                <!-- Generations -->
-                <Label x:Name="lblGenerations" Content="Generations" Width="100"/>
-                <TextBox x:Name="inputGenerations" Height="23" TextWrapping="Wrap" Text="1000" Width="100"/>
+				<!-- Generations -->
+				<Label x:Name="lblGenerations" Content="Generations" Width="100"/>
+				<TextBox x:Name="inputGenerations" Height="23" TextWrapping="Wrap" Text="1000" Width="100"/>
 
-                <!-- Population -->
-                <Label x:Name="lblPopulation" Content="Population" Width="100"/>
-                <TextBox x:Name="inputPopulation" Height="23" TextWrapping="Wrap" Text="100" Width="100"/>
+				<!-- Population -->
+				<Label x:Name="lblPopulation" Content="Population" Width="100"/>
+				<TextBox x:Name="inputPopulation" Height="23" TextWrapping="Wrap" Text="100" Width="100"/>
 
-                <!-- Cross over -->
-                <Label x:Name="lblCrossover" Content="Crossover" Width="100"/>
-                <TextBox x:Name="inputCrossover" Height="23" TextWrapping="Wrap" Text="0.7" Width="100"/>
+				<!-- Cross over -->
+				<Label x:Name="lblCrossover" Content="Crossover" Width="100"/>
+				<TextBox x:Name="inputCrossover" Height="23" TextWrapping="Wrap" Text="0.7" Width="100"/>
 
-                <!-- Mutations -->
-                <Label x:Name="lblMutation" Content="Mutation" Width="100"/>
-                <TextBox x:Name="inputMutation" Height="23" TextWrapping="Wrap" Text="0.001" Width="100"/>
+				<!-- Mutations -->
+				<Label x:Name="lblMutation" Content="Mutation" Width="100"/>
+				<TextBox x:Name="inputMutation" Height="23" TextWrapping="Wrap" Text="0.001" Width="100"/>
 
-                <!-- Tournament K -->
-                <Label x:Name="lblKTournament" Content="Torunament K" Width="100"/>
-                <TextBox x:Name="inputlblKTournament" Height="23" TextWrapping="Wrap" Text="2" Width="100"/>
+				<!-- Tournament K -->
+				<Label x:Name="lblKTournament" Content="Torunament K" Width="100"/>
+				<TextBox x:Name="inputlblKTournament" Height="23" TextWrapping="Wrap" Text="2" Width="100"/>
 
-            </ListBox>
-        </Border>
+			</ListBox>
+		</Border>
 
-        <!-- The filters. -->
-        <Button x:Name="buttonRun" Content="Run" VerticalAlignment="Bottom" Margin="10,0,0,10" HorizontalAlignment="Left" Width="110" Click="buttonRun_Click"/>
-        <Border BorderBrush="Black" BorderThickness="1" Margin="125,0,10,37" Height="34" VerticalAlignment="Bottom"/>
-        <Border BorderBrush="Black" BorderThickness="1" Margin="125,0,0,76" Height="28" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="58">
-            <Label x:Name="lblFilters" Content="Fliters" HorizontalAlignment="Left" Margin="-1" VerticalAlignment="Top" RenderTransformOrigin="-1.17,5.308" Width="79" Height="28"/>
-        </Border>
+		<!-- The filters. -->
+		<Button x:Name="buttonRun" Content="Run" VerticalAlignment="Bottom" Margin="10,0,0,10" HorizontalAlignment="Left" Width="110" Click="buttonRun_Click"/>
 
-        <!-- The graph -->
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="28" Margin="125,10,0,0" VerticalAlignment="Top" Width="198">
-            <Label x:Name="lblGraph" Content="Graph of Genetic Algorithm Runs"/>
-        </Border>
-        <Border BorderBrush="Black" BorderThickness="1" Margin="125,43,10,109">
-            <oxy:Plot Title="{Binding Title}" Name="plotter">
-                <oxy:Plot.Series>
-                    <oxy:LineSeries ItemsSource="{Binding MaxPoints}" Name="Max" Title="Max"/>
-                    <oxy:LineSeries ItemsSource="{Binding AvgPoints}" LineStyle="Dot" Name="Average" Title="Average"/>
-                </oxy:Plot.Series>
-                
-            </oxy:Plot>
-            <!--ListBox x:Name="resultBox" Margin="0,231,0,0"/>-->
-        </Border>
-        <Button x:Name="btnApplyFilters" Content="Apply Filters" Margin="125,0,0,10" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="79"/>
+		<!-- The graph -->
+		<Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="28" Margin="125,10,0,0" VerticalAlignment="Top" Width="198">
+			<Label x:Name="lblGraph" Content="Graph of Genetic Algorithm Runs"/>
+		</Border>
+		<Border BorderBrush="Black" BorderThickness="1" Margin="125,43,346,37">
+			<oxy:Plot Title="{Binding Title}" Name="plotter" Margin="0,0,31,0">
+				<oxy:Plot.Series>
+					<oxy:LineSeries ItemsSource="{Binding MaxPoints}" Name="Max" Title="Max"/>
+					<oxy:LineSeries ItemsSource="{Binding AvgPoints}" LineStyle="Dot" Name="Average" Title="Average"/>
+				</oxy:Plot.Series>
 
-    </Grid>
+			</oxy:Plot>
+
+		</Border>
+		<ListBox x:Name="resultBox" Margin="0,43,0,37" HorizontalAlignment="Right" Width="341"/>
+		<Button x:Name="btnApplyFilters" Content="Apply Filters" Margin="125,0,0,10" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="79"/>
+		<Button x:Name="btnSaveData" Content="Save Data" HorizontalAlignment="Left" Margin="209,0,0,10" VerticalAlignment="Bottom" Width="75" Click="btnSaveData_Click"/>
+		<Label x:Name="lblWarning" Content="Warning: This data maybe huge depending on your data set. This dumps the genotype data." Margin="289,0,0,6" Height="26" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="685"/>
+
+	</Grid>
 </Window>
