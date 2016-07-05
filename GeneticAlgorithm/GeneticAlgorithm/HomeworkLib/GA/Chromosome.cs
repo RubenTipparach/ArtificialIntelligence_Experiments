@@ -26,7 +26,8 @@ namespace GeneticAlgorithm.HomeworkLib.GA
 			List<Link> newLinks = new List<Link>();
 			foreach(var l in _encodedString)
 			{
-				newLinks.Add(l);
+                var nl = l.Copy();
+                newLinks.Add(nl);
 			}
 
 			return new Chromosome(newLinks);
@@ -70,7 +71,7 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// <param name="startIndex"></param>
         /// <param name="endindex"></param>
         /// <returns></returns>
-        private Chromosome Replace(bool[] rangeString, int startIndex, int endindex)
+        private void Replace(bool[] rangeString, int startIndex, int endindex)
         {
             int y = 0;
 
@@ -83,8 +84,6 @@ namespace GeneticAlgorithm.HomeworkLib.GA
                 _encodedString[i] = newLink;
                 y++;
             }
-
-            return this;
         }
 
         /// <summary>
@@ -96,8 +95,7 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// <param name="endIndex"></param>
         public static void Crossover(Chromosome a, Chromosome b, int startIndex, int endIndex)
         {
-            // I'm using the bools becaus they are structs and not copied by ref.
-            // Thank god I'm not using Java, that would suck lol.
+            // I'm using the bools because they are structs and not copied by ref.
             bool[] aString = a.GetRange(startIndex, endIndex);
             bool[] bString = b.GetRange(startIndex, endIndex);
 

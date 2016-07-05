@@ -83,9 +83,22 @@ namespace GeneticAlgorithm.HomeworkLib.GA
 			// Step 1.
 			GenerateChromosomes();
 
-            // What happens during each gneration.
+            // initial eval
+            yield return new AlgorithmResult()
+            {
+                MaxFitness = MaxFitness(_population),
+                AverageFitness = Chromosome.AverageFitness(_population),
+
+                // assign these as we go.
+                NumberOfCrossOversOccured = 0,
+                NumberOfMutationsOccured = 0//,
+                //GetChromosomeString = Chromosome.PopulationString(_population) // <-- use for debug.
+            };
+
+            // Happens during each gneration.
             for (int i = 0; i < _generations; i++)
             {
+                // dump the data!
                 yield return RunStructure();
             }
         }
@@ -95,30 +108,21 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// </summary>
         protected AlgorithmResult RunStructure()
         {
-            // Step 2.
+            // Step2 selection & Step 3 crossover.
             int crossoversOccured = PerformCrossOver(); // PerformCrossOver() do it again! 
 
-            // Step 3.
+            // Step 4.
             int mutationsOccured = PerformMutation();
 
-            // Step 4.
-            PerformSelection();
+            return new AlgorithmResult()
+            {
+                MaxFitness = MaxFitness(_population),
+                AverageFitness = Chromosome.AverageFitness(_population),
 
-			if(Chromosome.AverageFitness(_population) < 0.1)
-			{
-				Console.WriteLine("sup");
-			}
-
-			// dump the data!
-			return new AlgorithmResult()
-			{
-				MaxFitness = MaxFitness(_population),
-				AverageFitness = Chromosome.AverageFitness(_population),
-
-				// assign these as we go.
-				NumberOfCrossOversOccured = crossoversOccured,
-				NumberOfMutationsOccured = mutationsOccured//,
-				//GetChromosomeString = Chromosome.PopulationString(_population) // <-- use for debug.
+                // assign these as we go.
+                NumberOfCrossOversOccured = crossoversOccured,
+                NumberOfMutationsOccured = mutationsOccured//,
+                //GetChromosomeString = Chromosome.PopulationString(_population) // <-- use for debug.
             };
         }
 
@@ -167,17 +171,19 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         {
             int crossoverCounter = 0;
 
-			for (int i = 0; i < _populationSize; i++)
+            List<Chromosome> nextGeneration = new List<Chromosome>(_population.Count);
+
+            for (int i = 0; i < _populationSize/2; i++)
 			{
 				double selection = _random.NextDouble();
 
-				// randomly perform crossovers. Roll a dice or something.
-				if (selection < _crossoverProbability)
-                {
-                    // random pair from population.
-                    Chromosome aCrosser = _population[_random.Next(_populationSize)];
-                    Chromosome bCrosser = _population[_random.Next(_populationSize)];
+                // Random pair selected from population, based on 'tournament' selection.
+                Chromosome aCrosser = PerformTournamentSelection();
+                Chromosome bCrosser = PerformTournamentSelection();
 
+                // randomly perform crossovers. Roll a dice or something.
+                if (selection < _crossoverProbability)
+                {
                     // Generate a random range from the number of genes.
                     int startRange = _random.Next(_geneSize);
                     int endRange = _random.Next(startRange, _geneSize);
@@ -187,8 +193,12 @@ namespace GeneticAlgorithm.HomeworkLib.GA
 
                     crossoverCounter++;
                 }
+
+                nextGeneration.Add(aCrosser);
+                nextGeneration.Add(bCrosser);
             }
 
+            _population = nextGeneration;
             return crossoverCounter;
         }
 
@@ -202,10 +212,11 @@ namespace GeneticAlgorithm.HomeworkLib.GA
 			//Random r = new Random(); Local random causing trouble!!!!!!!
 
 			// randomly mutate.
-			for (int i = 0; i < _populationSize; i++)
+			for (int i = 0; i < _population.Count; i++)
 			{
-				// randomly perform crossovers. Roll a dice or something.
-				double mutate = _random.NextDouble();
+                // randomly perform crossovers. Roll a dice or something.
+                //double mutate = _random.NextDouble();
+                double mutate = (new Random()).NextDouble();
                 if (mutate < _mutationProbability)
                 {
                     int flipBit = _random.Next(_geneSize);
@@ -225,39 +236,32 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         }
 
         /// <summary>
-        /// Step 4. Perform the 'Tournament' selection. Randomly select two, which ever wins
+        /// Step 2. Perform the 'Tournament' selection. Randomly select two, which ever wins
         /// get's selected. Do this <see cref="_populationSize"/> times.
         /// </summary>
-        protected void PerformSelection()
+        protected Chromosome PerformTournamentSelection()
         {
-            // take the current list, and copy it into a new one using the tournament rules.
+            int a = _random.Next(_population.Count);
+            int b = _random.Next(_population.Count);
 
-            List<Chromosome> nextGeneration = new List<Chromosome>(_populationSize);
 
-			for (int i = 0; i < _populationSize; i++)
-			{
-				int a = _random.Next(_populationSize);
-				int b = _random.Next(_populationSize);
-				
-			
-				// Warning! Copy this, ;ooks like lots of side effects if I dont!
-                Chromosome aContester = _population[a].Copy();
-                Chromosome bContester = _population[b].Copy();
+            // Warning! Copy this, ;ooks like lots of side effects if I dont!
+            Chromosome aContester = _population[a].Copy();
+            Chromosome bContester = _population[b].Copy();
 
-                // the winner of the tournament goes to the next round!
-                if (aContester.Fitness > bContester.Fitness)
-                {
-                    nextGeneration.Add(aContester);
-                }
-                else
-                {
-                    nextGeneration.Add(bContester);
-                }
+            Chromosome winner;
+
+            // the winner of the tournament goes to the next round!
+            if (aContester.Fitness > bContester.Fitness)
+            {
+                winner = aContester;
+            }
+            else
+            {
+                winner = bContester;
             }
 
-            //replace with new crossoverPopulation
-            _population = nextGeneration;
-
+            return winner;
         }
 
         /// <summary>

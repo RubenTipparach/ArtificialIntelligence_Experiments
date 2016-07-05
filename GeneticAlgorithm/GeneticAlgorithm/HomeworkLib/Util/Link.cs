@@ -43,6 +43,18 @@ public struct Link {
         };
     }
 
+    public Link Copy()
+    {
+        return new Link()
+        {
+            Node1 = this.Node1,
+            Node2 = this.Node2,
+            Cost = this.Cost,
+            Active = this.Active
+        };
+    }
+
+
     /// <summary>
     /// Displays the current node in string format.
     /// </summary>
