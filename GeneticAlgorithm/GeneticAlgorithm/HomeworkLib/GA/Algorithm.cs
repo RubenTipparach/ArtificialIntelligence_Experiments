@@ -13,24 +13,27 @@ namespace GeneticAlgorithm.HomeworkLib.GA
     {
 
         /// <summary>
-        /// 
+        /// Number of overall iteration.
         /// </summary>
         private int _generations;
 
         /// <summary>
-        /// 
+        /// Number of memebers in the population. (I think I'm going to force it to be even for now.)
         /// </summary>
         private int _populationSize;
 
+        /// <summary>
+        /// The genetics size.
+        /// </summary>
 		private int _geneSize;
 
         /// <summary>
-        /// 
+        /// Crossover probability.
         /// </summary>
         private double _crossoverProbability;
 
         /// <summary>
-        /// 
+        /// Mutation probability.
         /// </summary>
         private double _mutationProbability;
 
@@ -40,17 +43,18 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         private List<Link> _initialLinks;
 
         /// <summary>
-        /// 
+        /// The current population.
         /// </summary>
         private List<Chromosome> _population;
 
         /// <summary>
-        /// Store the data in a list of each run for analysis later.
+        /// random instance.
         /// </summary>
-        private List<AlgorithmResult> _resultData;
-
 		private Random _random;
 
+        /// <summary>
+        /// Keeps track of the global maximum.
+        /// </summary>
 		private double _globalMax = 0;
 
         /// <summary>
@@ -199,7 +203,7 @@ namespace GeneticAlgorithm.HomeworkLib.GA
             }
 
             _population = nextGeneration;
-            return crossoverCounter;
+            return crossoverCounter*2;
         }
 
         /// <summary>
