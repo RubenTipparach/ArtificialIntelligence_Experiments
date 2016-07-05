@@ -112,7 +112,7 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// </summary>
         protected AlgorithmResult RunStructure()
         {
-            // Step2 selection & Step 3 crossover.
+            // Step 2 selection & Step 3 crossover.
             int crossoversOccured = PerformCrossOver(); // PerformCrossOver() do it again! 
 
             // Step 4.
@@ -134,7 +134,7 @@ namespace GeneticAlgorithm.HomeworkLib.GA
 		/// Calculate what the maximum fit ness is of a given set of chromosomes.
 		/// </summary>
 		/// <param name="chromosomes"></param>
-		/// <returns></returns>
+		/// <returns>The maximum fitness of the population.</returns>
 		public double MaxFitness(List<Chromosome> chromosomes)
 		{
 			double max = chromosomes.Max(p => p.Fitness);

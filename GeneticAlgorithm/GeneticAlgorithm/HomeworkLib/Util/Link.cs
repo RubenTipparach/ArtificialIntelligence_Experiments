@@ -43,6 +43,10 @@ public struct Link {
         };
     }
 
+    /// <summary>
+    /// Copies over the link.
+    /// </summary>
+    /// <returns></returns>
     public Link Copy()
     {
         return new Link()

@@ -12,14 +12,14 @@ namespace GeneticAlgorithm.HomeworkLib.GA
     {
         /// <summary>
         /// Technically this is overkill, but I'm too lazy to manage efficient arrays.
-        /// Can be optimized, but do I need to care? Nah.
+        /// Can be optimized.
         /// </summary>
         private List<Link> _encodedString;
 
 		/// <summary>
 		/// Copies this instance.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A deep copy of the Chromosome object.</returns>
 		public Chromosome Copy()
 		{
 			// perform deep copy.
@@ -34,7 +34,7 @@ namespace GeneticAlgorithm.HomeworkLib.GA
 		}
 
         /// <summary>
-        /// IDK why, I guess I like this class better than the links one.
+        /// I guess I like this class better than the links one.
         /// </summary>
         /// <param name="genetics"></param>
         public Chromosome(List<Link> genetics)
@@ -60,7 +60,7 @@ namespace GeneticAlgorithm.HomeworkLib.GA
                 y++;
             }
 
-            // Make sure its in range!
+            // Make sure it's in range!
             return linkReplaceRange;
         }
 
@@ -70,7 +70,6 @@ namespace GeneticAlgorithm.HomeworkLib.GA
         /// <param name="rangeString"></param>
         /// <param name="startIndex"></param>
         /// <param name="endindex"></param>
-        /// <returns></returns>
         private void Replace(bool[] rangeString, int startIndex, int endindex)
         {
             int y = 0;
@@ -115,6 +114,9 @@ namespace GeneticAlgorithm.HomeworkLib.GA
             }
         }
 
+        /// <summary>
+        /// Links.
+        /// </summary>
         public List<Link> Links
         {
             get
