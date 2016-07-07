@@ -267,16 +267,5 @@ namespace GeneticAlgorithm.HomeworkLib.GA
 
             return winner;
         }
-
-        /// <summary>
-        /// The raw links. Will be replaced as iteration goes on.
-        /// </summary>
-        public List<Link> Links
-        {
-            get
-            {
-                return _initialLinks;
-            }
-        }
     }
 }
